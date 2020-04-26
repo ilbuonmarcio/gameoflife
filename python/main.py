@@ -38,15 +38,14 @@ class GameOfLife(object):
                     y_end = y * self.token_height + self.token_height
 
                     if len(self.thread_areas) < self.processes:
-                        print("appending")
                         self.thread_areas.append((x_init, y_init, self.token_width, self.token_height))
 
                     token_queue.append((self.board[x_init:x_end, y_init:y_end], (x, y)))
 
             # processing token queue
             parsed_tokens = []
-            for token in token_queue:
-                parsed_tokens.append(self.parse_token(token[0], token[1]))
+            with multiprocessing.Pool(self.processes) as pool:
+                parsed_tokens = pool.map(self.parse_token, token_queue)
                 
             for token in parsed_tokens:
                 x_init = token[1][0] * self.token_width
@@ -60,9 +59,12 @@ class GameOfLife(object):
                         self.board[x][y] = token[0][x % self.token_width][y % self.token_height]
         else:
             self.thread_areas.append((0, 0, self.board.shape[0], self.board.shape[1]))
-            self.board = self.parse_token(self.board)[0]
+            self.board = self.parse_token([self.board, (0, 0)])[0]
 
-    def parse_token(self, token, token_id=(0, 0)):
+    def parse_token(self, token):
+        token_id = token[1]
+        token = token[0]
+
         copy = np.copy(token)
         
         for x in range(token.shape[0]):
@@ -95,4 +97,3 @@ if __name__ == "__main__":
     while True:
         gol.parse()
         print(gol)
-        sleep(0.1)
