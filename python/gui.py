@@ -17,8 +17,8 @@ clock = pygame.time.Clock()
 background_color = (150, 150, 150)
 count = 1
 
-gol = GameOfLife(16, 16, multithreaded=True)
-cell_scale = 2
+gol = GameOfLife(8, 8, multithreaded=True)
+cell_scale = 4
 
 # End of Game Values
 
@@ -44,13 +44,13 @@ while not game_ended:
     # Display update
     pygame.Surface.fill(window, background_color)
 
-    current_board, sliced_chuncks = gol.get_board()
+    current_board, thread_areas = gol.get_board()
     for x in range(0, len(current_board)):
         for y in range(0, len(current_board[x])):
             pygame.draw.rect(window, (255 * current_board[x][y], 255 * current_board[x][y], 255 * current_board[x][y]), (x * cell_scale, y * cell_scale, cell_scale, cell_scale))
-
-    for chunk in sliced_chuncks:
-        pygame.draw.rect(window, (0, 200, 0), (chunk[0] * cell_scale, chunk[1] * cell_scale, chunk[2] * cell_scale, chunk[3] * cell_scale), cell_scale)
+    
+    for area in thread_areas:
+        pygame.draw.rect(window, (0, 255, 0), (area[0] * cell_scale, area[1] * cell_scale, area[2] * cell_scale, area[3] * cell_scale), 1)
 
     pygame.display.update()
     clock.tick(FPS)
