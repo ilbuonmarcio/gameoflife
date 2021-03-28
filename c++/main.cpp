@@ -188,7 +188,7 @@ int main(int argc, char *argv[]){
 
 	glfwSetErrorCallback(error_callback);
 
-	GLFWwindow* window = glfwCreateWindow(1024, 1024, "Hello World!", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(512, 512, "Hello World!", NULL, NULL);
 	if (!window)
 	{
 		std::cout << "OpenGL context or window creation failed.";
@@ -196,8 +196,10 @@ int main(int argc, char *argv[]){
 
 	glfwMakeContextCurrent(window);
 	setup(window);
+	glfwSwapInterval(1);
 	while (!glfwWindowShouldClose(window))
 	{
+		glfwPollEvents();
 		display(window, board, temp_board);
 	}
 
