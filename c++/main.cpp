@@ -10,7 +10,7 @@
 #include <GL/glu.h>
 #include <GLFW/glfw3.h>
 
-const int N = 384;
+const int N = 1024;
 int counter = 0;
 int refresh_after = 500;
 
@@ -183,7 +183,7 @@ int main(int argc, char *argv[]){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-	GLFWwindow* window = glfwCreateWindow(512, 512, "Hello World!", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1024, 1024, "Hello World!", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
