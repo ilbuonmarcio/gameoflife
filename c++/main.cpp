@@ -120,10 +120,6 @@ void update_board(int** board, int** temp_board){
 }
 
 void display(GLFWwindow* window, int** board, int**temp_board){
-	update_board(board, temp_board);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glColor3f(1.0f, 1.0f, 1.0f);
 	
 	counter++;
@@ -148,15 +144,9 @@ void display(GLFWwindow* window, int** board, int**temp_board){
 		}
 		row++;
 	}
-
-	glfwSwapBuffers(window);
 }
 
 void setup(GLFWwindow* window) {
-	int width, height;
-	glfwGetFramebufferSize(window, &width, &height);
-	glViewport(0, 0, width, height);
-
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
@@ -181,29 +171,42 @@ int main(int argc, char *argv[]){
 	init_board(board);
 	copy_board(board, temp_board);
 
+	glfwSetErrorCallback(error_callback);
+
 	if (!glfwInit())
 	{
 		std::cout << "Initialization failed.";
 	}
 
-	glfwSetErrorCallback(error_callback);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
 	GLFWwindow* window = glfwCreateWindow(512, 512, "Hello World!", NULL, NULL);
 	if (!window)
 	{
+		glfwTerminate();
 		std::cout << "OpenGL context or window creation failed.";
 	}
 
 	glfwMakeContextCurrent(window);
-	setup(window);
 	glfwSwapInterval(1);
+	setup(window);
 	while (!glfwWindowShouldClose(window))
 	{
-		glfwPollEvents();
+		update_board(board, temp_board);
+
+		int width, height;
+		glfwGetFramebufferSize(window, &width, &height);
+		glViewport(0, 0, width, height);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		display(window, board, temp_board);
+
+		glfwSwapBuffers(window);
+        glfwPollEvents();
 	}
 
 	glfwDestroyWindow(window);
-	glfwTerminate();
-	return 0;
+    glfwTerminate();
+    exit(EXIT_SUCCESS);
 }
