@@ -6,18 +6,9 @@
 #include <cstdlib>
 #include <ctime>
 
-#ifdef WIN32 //if using windows then do windows specific stuff.
-#define WIN32_LEAN_AND_MEAN //remove MFC overhead from windows.h which can cause slowness
-#define WIN32_EXTRA_LEAN
-
-#include <windows.h>
-#endif
-
-#define GLUT_DISABLE_ATEXIT_HACK
 #include <GL/gl.h>
-#include <GL/glut.h>
 #include <GL/glu.h>
-#include <ncurses.h>//needed for getch
+#include <GLFW/glfw3.h>
 
 const int N = 512;
 int counter = 0;
@@ -128,7 +119,7 @@ void update_board(int** board, int** temp_board){
 	replace_board(board, temp_board);
 }
 
-void display(int** board, int**temp_board){
+void display(GLFWwindow* window, int** board, int**temp_board){
 	update_board(board, temp_board);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -158,12 +149,20 @@ void display(int** board, int**temp_board){
 		row++;
 	}
 
-	glutSwapBuffers();
-	glutPostRedisplay();
+	glfwSwapBuffers(window);
 }
 
-void setup() {
+void setup(GLFWwindow* window) {
+	int width, height;
+	glfwGetFramebufferSize(window, &width, &height);
+	glViewport(0, 0, width, height);
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+}
+
+void error_callback(int error, const char* description)
+{
+    fprintf(stderr, "Error: %s\n", description);
 }
 
 int main(int argc, char *argv[]){
@@ -182,17 +181,27 @@ int main(int argc, char *argv[]){
 	init_board(board);
 	copy_board(board, temp_board);
 
-	glutInit(&argc, argv);
-        glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-        glutInitWindowSize(1024, 1024);
-        glutCreateWindow("Hello World");
+	if (!glfwInit())
+	{
+		std::cout << "Initialization failed.";
+	}
 
-        setup();
-        glutFullScreen();
-        // glutDisplayFunc(display);
+	glfwSetErrorCallback(error_callback);
 
-	// glutMainLoop();
+	GLFWwindow* window = glfwCreateWindow(1024, 1024, "Hello World!", NULL, NULL);
+	if (!window)
+	{
+		std::cout << "OpenGL context or window creation failed.";
+	}
 
-	getch();
+	glfwMakeContextCurrent(window);
+	setup(window);
+	while (!glfwWindowShouldClose(window))
+	{
+		display(window, board, temp_board);
+	}
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
 	return 0;
 }
