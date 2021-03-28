@@ -12,7 +12,7 @@
 
 const int N = 1024;
 int counter = 0;
-int refresh_after = 500;
+int refresh_after = 10000;
 
 void init_board(int** board){
 	for(int x = 0; x < N; x++){
