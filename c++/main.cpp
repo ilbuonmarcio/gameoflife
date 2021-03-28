@@ -176,6 +176,7 @@ int main(int argc, char *argv[]){
 	if (!glfwInit())
 	{
 		std::cout << "Initialization failed.";
+		exit(EXIT_FAILURE);
 	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -186,6 +187,7 @@ int main(int argc, char *argv[]){
 	{
 		glfwTerminate();
 		std::cout << "OpenGL context or window creation failed.";
+		exit(EXIT_FAILURE);
 	}
 
 	glfwMakeContextCurrent(window);
@@ -193,13 +195,12 @@ int main(int argc, char *argv[]){
 	setup(window);
 	while (!glfwWindowShouldClose(window))
 	{
-		update_board(board, temp_board);
-
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		update_board(board, temp_board);
 		display(window, board, temp_board);
 
 		glfwSwapBuffers(window);
