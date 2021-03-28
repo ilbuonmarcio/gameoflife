@@ -63,8 +63,8 @@ void update_board(int** board, int** temp_board){
 
 	copy_board(board, temp_board);
 	int result = 0;
-	for(int x = 0; x < N; x++){
-		for(int y = 0; y < N; y++){
+	for(int x = 1; x < N-1; x++){
+		for(int y = 1; y < N-1; y++){
 
 			if(x-1 >= 0 && y-1 >= 0 && board[x-1][y-1] == 1){
 				result++;
@@ -120,13 +120,13 @@ void update_board(int** board, int** temp_board){
 }
 
 void display(GLFWwindow* window, int** board, int**temp_board){
-	glColor3f(1.0f, 1.0f, 1.0f);
-	
 	counter++;
 	if(counter > refresh_after){
 		refresh_board(board);
 		counter = 0;
 	}
+
+	glColor3f(1.0f, 1.0f, 1.0f);
 
 	glRectf(-1, -1, 1, 1);
 
