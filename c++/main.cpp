@@ -10,7 +10,7 @@
 #include <GL/glu.h>
 #include <GLFW/glfw3.h>
 
-const int N = 512;
+const int N = 128;
 int counter = 0;
 int refresh_after = 500;
 
@@ -132,17 +132,31 @@ void display(GLFWwindow* window, int** board, int**temp_board){
 
 	glColor3f(0.0f, 0.0f, 0.0f);
 
+	// int row = 0;
+	// int col = 0;
+	// for(float i=-1.0; i<1.0; i=i+(1.0/N)){
+	// 	col=0;
+	// 	for(float j=-1.0; j<1.0; j=j+(1.0/N)){
+	// 		if(row < N && col < N && board[row][col] == 1){
+	// 			glRectf(i, j, i+(1.0/N), j+(1.0/N));
+	// 		}
+	// 		col++;
+	// 	}
+	// 	row++;
+	// }
+
 	int row = 0;
 	int col = 0;
-	for(float i=-1.0; i<1.0; i=i+(1.0/N)){
-		col=0;
-		for(float j=-1.0; j<1.0; j=j+(1.0/N)){
-			if(board[row][col] == 1){
-				glRectf(i, j, i+(1.0/N), j+(1.0/N));
+	double slope = 1.0 * (+1 - -1) / (N - 0);
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			if(board[i][j] == 1){
+				// Mapping i and j to -1;+1 
+				float i_new = -1 + slope * (i - 0);
+				float j_new = -1 + slope * (j - 0);
+				glRectf(i_new, j_new, i_new + (1.0/N), j_new + (1.0/N));
 			}
-			col++;
 		}
-		row++;
 	}
 }
 
