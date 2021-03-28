@@ -23,10 +23,7 @@ const int N = 512;
 int counter = 0;
 int refresh_after = 500;
 
-int board[N][N];
-int temp_board[N][N];
-
-void init_board(){
+void init_board(int** board){
 	for(int x = 0; x < N; x++){
 		for(int y = 0; y < N; y++){
 			board[x][y] = std::rand()%2;
@@ -34,7 +31,7 @@ void init_board(){
 	}
 }
 
-void refresh_board(){
+void refresh_board(int** board){
 	for(int x = 0; x < N; x++){
 		for(int y = 0; y < N; y++){
 			if (board[x][y] == 0){
@@ -44,7 +41,7 @@ void refresh_board(){
 	}
 }
 
-void print_board(){
+void print_board(int** board){
 	for(int x = 0; x < N; x++){
 		for(int y = 0; y < N; y++){
 			std::cout << board[x][y];
@@ -55,7 +52,7 @@ void print_board(){
 	std::cout << std::endl;
 }
 
-void copy_board(){
+void copy_board(int** board, int** temp_board){
 	for(int x = 0; x < N; x++){
 		for(int y = 0; y < N; y++){
 			temp_board[x][y] = board[x][y];
@@ -63,7 +60,7 @@ void copy_board(){
 	}
 }
 
-void replace_board(){
+void replace_board(int** board, int**temp_board){
 	for(int x = 0; x < N; x++){
 		for(int y = 0; y < N; y++){
 			board[x][y] = temp_board[x][y];
@@ -71,9 +68,9 @@ void replace_board(){
 	}
 }
 
-void update_board(){
+void update_board(int** board, int** temp_board){
 
-	copy_board();
+	copy_board(board, temp_board);
 	int result = 0;
 	for(int x = 0; x < N; x++){
 		for(int y = 0; y < N; y++){
@@ -128,11 +125,11 @@ void update_board(){
 		}
 	}
 
-	replace_board();
+	replace_board(board, temp_board);
 }
 
-void display(){
-	update_board();
+void display(int** board, int**temp_board){
+	update_board(board, temp_board);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -140,7 +137,7 @@ void display(){
 	
 	counter++;
 	if(counter > refresh_after){
-		refresh_board();
+		refresh_board(board);
 		counter = 0;
 	}
 
@@ -170,22 +167,31 @@ void setup() {
 }
 
 int main(int argc, char *argv[]){
+	int** board;
+	board = new int*[N];
+	int** temp_board;
+	temp_board = new int*[N];
+
+    for (int i = 0; i < N; ++i) {
+        board[i] = new int[N];
+		temp_board[i] = new int[N];
+    }
 	
 	std::srand(std::time(NULL));
 
-	init_board();
-	copy_board();
+	init_board(board);
+	copy_board(board, temp_board);
 
 	glutInit(&argc, argv);
         glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-        glutInitWindowSize(768, 768);
+        glutInitWindowSize(1024, 1024);
         glutCreateWindow("Hello World");
 
         setup();
         glutFullScreen();
-        glutDisplayFunc(display);
+        // glutDisplayFunc(display);
 
-	glutMainLoop();
+	// glutMainLoop();
 
 	getch();
 	return 0;
