@@ -63,8 +63,8 @@ void update_board(int** board, int** temp_board){
 
 	copy_board(board, temp_board);
 	int result = 0;
-	for(int x = 1; x < N-1; x++){
-		for(int y = 1; y < N-1; y++){
+	for(int x = 0; x < N; x++){
+		for(int y = 0; y < N; y++){
 
 			if(x-1 >= 0 && y-1 >= 0 && board[x-1][y-1] == 1){
 				result++;
@@ -74,7 +74,7 @@ void update_board(int** board, int** temp_board){
 				result++;
 			}
 
-			if(x+1 <= N && y-1 >= 0 && board[x+1][y-1] == 1){
+			if(x+1 < N && y-1 >= 0 && board[x+1][y-1] == 1){
 				result++;
 			}
 
@@ -82,11 +82,11 @@ void update_board(int** board, int** temp_board){
 				result++;
 			}
 
-			if(x+1 <= N && board[x+1][y] == 1){
+			if(x+1 < N && board[x+1][y] == 1){
 				result++;
 			}
 
-			if(x-1 >= 0 && y+1 <= N && board[x-1][y+1] == 1){
+			if(x-1 >= 0 && y+1 < N && board[x-1][y+1] == 1){
 				result++;
 			}
 
@@ -94,7 +94,7 @@ void update_board(int** board, int** temp_board){
 				result++;
 			}
 
-			if(x+1 <= N && y+1 <= N && board[x+1][y+1] == 1){
+			if(x+1 < N && y+1 < N && board[x+1][y+1] == 1){
 				result++;
 			}
 
