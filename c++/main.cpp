@@ -126,11 +126,11 @@ void display(GLFWwindow* window, int** board, int**temp_board){
 		counter = 0;
 	}
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
 
 	glRectf(-1, -1, 1, 1);
 
-	glColor3f(0.0f, 0.0f, 0.0f);
+	glColor3f(0.0f, 1.0f, 0.0f);
 
 	int row = 0;
 	int col = 0;
